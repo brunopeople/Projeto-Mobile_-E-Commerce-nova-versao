@@ -13,7 +13,7 @@ state = {
 	links: linkData,
 	cart: []
 };
-
+// 
 handleSideBar = () => {
 	this.setState({ sidebarOpen: !this.state.sidebarOpen });
 };
