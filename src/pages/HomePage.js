@@ -1,9 +1,15 @@
 import React from "react";
+import Hero from "../components/Hero";
+import {Link} from "react-router-dom";
 
-export default function AboutPage() {
+export default function HomePage() {
   return (
     <>
-      <h1>Hello From About Page</h1>
+      <Hero title="awesome gadgets" max="true">
+        <Link to="/products" className="main-link" style={{margin:"2rem"}}>
+          Nossos Produtos
+        </Link>
+      </Hero>
     </>
   );
 }
