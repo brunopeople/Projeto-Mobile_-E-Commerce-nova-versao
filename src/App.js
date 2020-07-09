@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import './App.css';
+import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-
 
 import Home from "./pages/HomePage";
 import About from "./pages/AboutPage";
@@ -18,7 +16,6 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import SideCart from "./components/SideCart";
 import Footer from "./components/Footer";
-
 class App extends Component {
   render() {
     return (
