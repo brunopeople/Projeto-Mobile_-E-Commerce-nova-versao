@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { linkData } from "./linkData";
 import { socialData } from "./socialData";
 import { items } from "./productData";
-
 const ProductContext = React.createContext();
 //Provider
 //Consumer
@@ -10,97 +9,89 @@ class ProductProvider extends Component {
   state = {
     sidebarOpen: false,
     cartOpen: false,
-    cartItems: 2,
     links: linkData,
     socialIcons: socialData,
     cart: [],
     cartItems: 0,
     cartSubTotal: 0,
     cartTax: 0,
-    cartTotal: 0,
+    carTotal: 0,
     storeProducts: [],
     filteredProducts: [],
     featuredProducts: [],
     singleProduct: {},
     loading: false
   };
+  componentDidMount() {
+    //from contentful items
 
-  // método que serve para setar o conteudo da array de produtos.
-  componentDidMount(){
     this.setProducts(items);
   }
 
+  //set products
+
   setProducts = products => {
     let storeProducts = products.map(item => {
-      const {id} = item.sys;
-      const image = item.fields.image.fields.file.url 
+      const { id } = item.sys;
+      const image = item.fields.image.fields.file.url;
       const product = { id, ...item.fields, image };
       return product;
     });
-
+    //  featured products
     let featuredProducts = storeProducts.filter(item => item.featured === true);
     this.setState({
       storeProducts,
       filteredProducts: storeProducts,
       featuredProducts,
       cart: this.getStorageCart(),
-      singleProduct: this.getStoreProduct(),
+      singleProduct: this.getStorageProduct(),
       loading: false
-
     });
   };
-
-  // Pega o carrinho que está na loja
+  // get cart from local storage
   getStorageCart = () => {
     return [];
   };
-
-  //Pegar o produto que está no carrinho
-  getStoreProduct = () => {
+  // get product from local storage
+  getStorageProduct = () => {
     return {};
   };
-
-  //Soma o total
+  // get totals
   getTotals = () => {};
-
-  //adciona o total 
+  //add totals
   addTotals = () => {};
-
-  //sincroniza o carrinho
+  // sync storage
   syncStorage = () => {};
-
-  //adiciona ao carrinho
+  //add to cart
   addToCart = id => {
     let tempCart = [...this.state.cart];
     let tempProducts = [...this.state.storeProducts];
     let tempItem = tempCart.find(item => item.id === id);
-    if(!tempItem) {
+    if (!tempItem) {
       tempItem = tempProducts.find(item => item.id === id);
       let total = tempItem.price;
-      let cartItem = {...tempItem, count: 1, total};
+      let cartItem = { ...tempItem, count: 1, total };
       tempCart = [...tempCart, cartItem];
     } else {
       tempItem.count++;
       tempItem.total = tempItem.price * tempItem.count;
       tempItem.total = parseFloat(tempItem.total.toFixed(2));
     }
-
     this.setState(
       () => {
-        return {cart: tempCart};
+        return { cart: tempCart };
       },
       () => {
         this.addTotals();
         this.syncStorage();
         this.openCart();
-        }
-      );
-    };
-
-  // adicionar apenas um produto no carrinho
+      }
+    );
+  };
+  // set single product
   setSingleProduct = id => {
     console.log(`set single product ${id}`);
-  }
+  };
 
   // handle sidebar
   handleSidebar = () => {
@@ -128,7 +119,7 @@ class ProductProvider extends Component {
           closeCart: this.closeCart,
           openCart: this.openCart,
           addToCart: this.addToCart,
-          setSingleProduct: this.singleProduct
+          setSingleProduct: this.setSingleProduct
         }}
       >
         {this.props.children}
