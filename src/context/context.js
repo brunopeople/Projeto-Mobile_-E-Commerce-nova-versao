@@ -34,7 +34,7 @@ class ProductProvider extends Component {
     let storeProducts = products.map(item => {
       const {id} = item.sys;
       const image = item.fields.image.fields.file.url 
-      const product = { id,...item.fields};
+      const product = { id, ...item.fields, image };
       return product;
     });
 
@@ -58,7 +58,7 @@ class ProductProvider extends Component {
   //Pegar o produto que está no carrinho
   getStoreProduct = () => {
     return {};
-  }
+  };
 
   //Soma o total
   getTotals = () => {};
@@ -70,16 +70,37 @@ class ProductProvider extends Component {
   syncStorage = () => {};
 
   //adiciona ao carrinho
-
   addToCart = id => {
-    console.log(`add to cart ${id}`);
-  }
+    let tempCart = [...this.state.cart];
+    let tempProducts = [...this.state.storeProducts];
+    let tempItem = tempCart.find(item => item.id === id);
+    if(!tempItem) {
+      tempItem = tempProducts.find(item => item.id === id);
+      let total = tempItem.price;
+      let cartItem = {...tempItem, count: 1, total};
+      tempCart = [...tempCart, cartItem];
+    } else {
+      tempItem.count++;
+      tempItem.total = tempItem.price * tempItem.count;
+      tempItem.total = parseFloat(tempItem.total.toFixed(2));
+    }
+
+    this.setState(
+      () => {
+        return {cart: tempCart};
+      },
+      () => {
+        this.addTotals();
+        this.syncStorage();
+        this.openCart();
+        }
+      );
+    };
 
   // adicionar apenas um produto no carrinho
   setSingleProduct = id => {
     console.log(`set single product ${id}`);
   }
-
 
   // handle sidebar
   handleSidebar = () => {
@@ -105,7 +126,9 @@ class ProductProvider extends Component {
           handleSidebar: this.handleSidebar,
           handleCart: this.handleCart,
           closeCart: this.closeCart,
-          openCart: this.openCart
+          openCart: this.openCart,
+          addToCart: this.addToCart,
+          setSingleProduct: this.singleProduct
         }}
       >
         {this.props.children}
