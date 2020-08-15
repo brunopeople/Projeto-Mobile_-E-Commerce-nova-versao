@@ -28,7 +28,7 @@ class ProductProvider extends Component {
     this.setProducts(items);
   }
 
-  //set products
+  //setar os produtos 
 
   setProducts = products => {
     let storeProducts = products.map(item => {
@@ -37,33 +37,46 @@ class ProductProvider extends Component {
       const product = { id, ...item.fields, image };
       return product;
     });
-    //  featured products
+    // Exibir as caracteristicas do produto ao clicar 
     let featuredProducts = storeProducts.filter(item => item.featured === true);
-    this.setState({
+    this.setState(
+      {
       storeProducts,
       filteredProducts: storeProducts,
       featuredProducts,
       cart: this.getStorageCart(),
       singleProduct: this.getStorageProduct(),
       loading: false
-    });
-  };
-  // get cart from local storage
+    },
+    () => {
+      this.addTotals();
+    }
+  );
+};
+  // inserir o produto no carrinho de compras
   getStorageCart = () => {
-    return [];
+    let cart;
+    if(localStorage.getItem("cart")){
+      cart = JSON.parse(localStorage.getItem("cart"));
+    } else {
+      cart = [];
+    }
+    return cart;
   };
-  // get product from local storage
+  // pegar o produto na localstorage 
   getStorageProduct = () => {
-    return {};
+    return localStorage.getItem("singleProduct")
+    ? JSON.parse(localStorage.getItem("singleProduct"))
+    : {};
   };
   // get totals
   getTotals = () => {
     let subTotal = 0;
     let cartItems = 0;
     this.state.cart.forEach(item => {
-      subtotal += item.total
+      subTotal += item.total
       cartItems += item.count
-    })
+    });
 
     subTotal = parseFloat(subTotal.toFixed(2));
     let tax = subTotal * 0.2;
@@ -88,7 +101,9 @@ class ProductProvider extends Component {
     });
   };
   // sync storage
-  syncStorage = () => {};
+  syncStorage = () => {
+    localStorage.setItem("cart", JSON.stringify(this.state.cart));
+  };
   //add to cart
   addToCart = id => {
     let tempCart = [...this.state.cart];
@@ -115,9 +130,14 @@ class ProductProvider extends Component {
       }
     );
   };
-  // set single product
+  // setar o método singleProduct 
   setSingleProduct = id => {
-    console.log(`set single product ${id}`);
+   let product = this.state.storeProducts.find(item => item.id === id);
+   localStorage.setItem("singleProduct", JSON.stringify(product));
+   this.setState({
+     singleProduct: {...product },
+     loading: false
+   });
   };
 
   // handle sidebar
