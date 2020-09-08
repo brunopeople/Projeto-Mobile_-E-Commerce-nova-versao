@@ -20,7 +20,13 @@ class ProductProvider extends Component {
     filteredProducts: [],
     featuredProducts: [],
     singleProduct: {},
-    loading: false
+    loading: true,
+search:'',
+price:0,
+min:0,
+max:0,
+company: "all",
+shipping: false
   };
   componentDidMount() {
     //vindo items satisfeito. 

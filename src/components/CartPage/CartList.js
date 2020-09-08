@@ -13,7 +13,7 @@ export default function CartList(){
                             if(cart.length === 0){
                                 return(
                                     <h1 className="text-title text-center my-4">
-                                        O seu carrinho está vazinho1
+                                        O seu carrinho está vazinho!
                                     </h1>
                                 );
                             }
