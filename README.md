@@ -28,3 +28,12 @@ carrinho. </p>
  # Pagina de Sobre Nós
  
  <img>![sobrenos](https://user-images.githubusercontent.com/24817323/101266459-cdc18580-372d-11eb-9520-21b4529450ef.jpg)</img>
+
+
+## Como Executar?
+
+ - Primeiro Baixe o projeto no repositório
+ - Unzip a pasta do projeto
+ - Abra o prompt de Comando do Node.js, vá para o diretório do projeto e execute o comando <strong>npm install</strong>
+ - Depois em seguida execute o comando <strong>NPM START</strong>
+ - Ele abrirá num numa janelo com endereço da porta <strong>localhost:3000</strong>
